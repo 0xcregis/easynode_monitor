@@ -1,0 +1,35 @@
+version: '3.4'
+services:
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    hostname: prometheus
+    ports:
+      - 4090:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+  prometheus-exporter:
+    image: prom/node-exporter
+    container_name: service
+    hostname: service
+    ports:
+      - 4100:9100
+  kafka-exporter:
+    image: danielqsj/kafka-exporter
+    container_name: kafka-export
+    hostname: kafka-export
+    ports:
+      - 4308:9308
+    command: --kafka.server=easykafka:9092      
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    hostname: grafana
+    ports:
+      - 4000:3000
+    volumes:  
+      - ./grafana.ini:/etc/grafana/grafana.ini
+networks:
+  default:
+    external:
+      name: easynode_easynode_net
