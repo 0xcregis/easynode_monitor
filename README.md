@@ -33,6 +33,18 @@ notes：
   name: Kafka Exporter Overview.
   ``````
 
+　[dashboard](https://grafana.com/grafana/dashboards/7589-kafka-exporter-overview/)
+  [exporter](https://github.com/danielqsj/kafka_exporter)
+
+- 配置node 
+
+  ``````
+  Grafana Dashboard ID:11074
+  name:Node Exporter Full
+  
+  ``````
+  [dashboard](https://grafana.com/grafana/dashboards/1860-node-exporter-full/)
+ 
 - 配置 clickhouse 
 
   - 进入 Home/Connections/Connect data 目录
