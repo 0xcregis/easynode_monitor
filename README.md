@@ -27,7 +27,12 @@ notes：
 
 ## 配置
 
-- 配置 Kafka / dashboards
+- 配置prometheus
+  - 进入 Connections/Connect Data,Search Prometheus 插件并安装
+  - HTTP 配置，URL: http://prometheus:4090,其他字段默认即可
+  - 点击 Save&test
+
+- 配置 Kafka 的dashboards
   ``````
   Grafana Dashboard ID: 7589
   name: Kafka Exporter Overview.
@@ -36,7 +41,7 @@ notes：
 　[dashboard](https://grafana.com/grafana/dashboards/7589-kafka-exporter-overview/)
   [exporter](https://github.com/danielqsj/kafka_exporter)
 
-- 配置node 
+- 配置node 的dashboards
 
   ``````
   Grafana Dashboard ID:11074
