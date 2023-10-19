@@ -1,6 +1,7 @@
 {
   "RootPath": "/api/chain",
   "Port": 9002,
+  "ChainPath": "/chain.json",
   "BaseDb": {
     "Addr": "192.168.2.9",
     "Port": 9000,

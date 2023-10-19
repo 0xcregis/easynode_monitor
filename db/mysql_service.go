@@ -13,6 +13,21 @@ type MysqlServer struct {
 	log *xlog.XLog
 }
 
+func (m *MysqlServer) AddFullNode(fullNode *common.FullNode) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (m *MysqlServer) QueryFullNode(chain string) ([]*common.FullNode, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (m *MysqlServer) UpdateFullNode(chain string, fullNode *common.FullNode) error {
+	//TODO implement me
+	panic("implement me")
+}
+
 func NewMysql(x *xlog.XLog, db *config.BaseDb) SqlInterface {
 	b, err := driver.Open(db.User, db.Password, db.Addr, db.DbName, db.Port, x)
 	if err != nil {

@@ -1,0 +1,11 @@
+[
+  {
+    "chainCode": 200,
+    "chainName": "eth",
+    "chainIcon": "",
+    "httpUri": "",
+    "httpPort": "8090",
+    "wsUri": "",
+    "wsPort": "8091"
+  }
+]
