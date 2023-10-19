@@ -12,6 +12,11 @@ type UserServer struct {
 	x      *xlog.XLog
 }
 
+func (s *UserServer) GetSysUser(account string) (*common.SysUser, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
 func NewUserSrv(x *xlog.XLog, cfg *config.Config) SysUserInterface {
 	sql := db.NewMysql(x, cfg.BaseDb)
 	return &UserServer{

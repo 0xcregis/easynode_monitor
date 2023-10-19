@@ -22,6 +22,15 @@ func NewHandler(cfg *config.Config, x *xlog.XLog) Handler {
 	}
 }
 
+func (h *Handler) Authenticate(ctx *gin.Context) {
+
+}
+func (h *Handler) Login(ctx *gin.Context) (string, error) {
+
+	//todo return account
+	return "", nil
+}
+
 func (h *Handler) Query(ctx *gin.Context) {
 
 }
