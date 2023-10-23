@@ -4,8 +4,9 @@ import "github.com/0xcregis/easynode_monitor/common"
 
 type SqlInterface interface {
 	//user
-	Query() ([]*common.SysUser, error)
-	AddUser(u **common.SysUser) error
+	QueryAllSysUser() ([]*common.SysUser, error)
+	GetSysUser(account string) (*common.SysUser, error)
+	AddSysUser(u *common.SysUser) error
 	ResetPwd(account string, pwd string) error
 
 	//fullnode

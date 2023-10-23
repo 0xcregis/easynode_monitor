@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
@@ -27,9 +28,11 @@ func main() {
 	}
 	log.Printf("%+v\n", cfg)
 
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 	x := xlog.NewXLogger().BuildOutType(xlog.FILE).BuildLevel(xlog.Level(cfg.LogLevel)).BuildFormatter(xlog.FORMAT_JSON).BuildFile("./log/app", 24*time.Hour)
 	e := gin.Default()
-	h := NewHandler(&cfg, x)
+	h := NewHandler(&cfg, x, ctx)
 
 	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
 		Realm:       "easynode",
@@ -59,7 +62,7 @@ func main() {
 		},
 
 		Authorizator: func(data interface{}, c *gin.Context) bool {
-			return true
+			return h.Authenticate(c)
 		},
 		Unauthorized: func(c *gin.Context, code int, message string) {
 			c.JSON(code, gin.H{
@@ -89,9 +92,8 @@ func main() {
 	g := e.Group(cfg.RootPath)
 	g.POST("/login", authMiddleware.LoginHandler)
 	u := g.Group("/sys/user")
-	u.Use(h.Authenticate)
-	u.GET("/list", h.Query)
-	u.POST("/add", h.AddUser)
+	u.GET("/list", h.QuerySysUser)
+	u.POST("/add", h.AddSysUser)
 	u.POST("/resetPwd", h.ResetPwd)
 
 	err = e.Run(fmt.Sprintf(":%v", cfg.Port))

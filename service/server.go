@@ -28,23 +28,19 @@ func NewUserSrv(x *xlog.XLog, cfg *config.Config) SysUserInterface {
 }
 
 func (s *UserServer) GetSysUser(account string) (*common.SysUser, error) {
-	//TODO implement me
-	panic("implement me")
+	return s.baseDb.GetSysUser(account)
 }
 
-func (s *UserServer) Query() ([]*common.SysUser, error) {
-	//TODO implement me
-	panic("implement me")
+func (s *UserServer) QueryAllSysUser() ([]*common.SysUser, error) {
+	return s.baseDb.QueryAllSysUser()
 }
 
-func (s *UserServer) AddUser(u *common.SysUser) error {
-	//TODO implement me
-	panic("implement me")
+func (s *UserServer) AddSysUser(u *common.SysUser) error {
+	return s.baseDb.AddSysUser(u)
 }
 
 func (s *UserServer) ResetPwd(account string, pwd string) error {
-	//TODO implement me
-	panic("implement me")
+	return s.baseDb.ResetPwd(account, pwd)
 }
 
 type ChainNode struct {
@@ -54,19 +50,35 @@ type ChainNode struct {
 	chains    []*config.Chain
 }
 
+// GetAdvanceFullNode get advance fullNode
 func (c *ChainNode) GetAdvanceFullNode(chain string) (*common.FullNode, error) {
-	//TODO implement me
-	panic("implement me")
+	list, err := c.QueryFullNode(chain)
+	if err != nil {
+		return nil, err
+	}
+	temp := list[0]
+	for _, v := range list {
+		/**
+		  what is advance fullNode:
+		  1. netStatus is able
+		  2. BlockNumber is more than other
+		*/
+		if v.NetStatus == 0 || v.NetStatus == 1 {
+			if /*v.NetDuration >= 0 && v.NetDuration <= temp.NetDuration && */ v.LatestBlockNumber >= temp.LatestBlockNumber {
+				temp = v
+			}
+		}
+	}
+
+	return temp, nil
 }
 
 func (c *ChainNode) AddFullNode(fullNode *common.FullNode) error {
-	//TODO implement me
-	panic("implement me")
+	return c.baseDb.AddFullNode(fullNode)
 }
 
 func (c *ChainNode) QueryFullNode(chain string) ([]*common.FullNode, error) {
-	//TODO implement me
-	panic("implement me")
+	return c.baseDb.QueryFullNode(chain)
 }
 
 func (c *ChainNode) UpdateFullNode(chainCode string, fullNode *common.FullNode) error {
@@ -75,13 +87,13 @@ func (c *ChainNode) UpdateFullNode(chainCode string, fullNode *common.FullNode) 
 		err := c.baseDb.UpdateFullNode(chainCode, fullNode)
 		c.log.Warnf("UpdateFullNode|err:%v", err.Error())
 	}()
-	number, duration, err := chain.GetLatestBlock(chainCode)
+	number, duration, err := chain.GetLatestBlock(chainCode, fullNode)
 	if err != nil {
 		fullNode.NetDuration = -1
 		fullNode.NetStatus = 2
 		return err
 	}
-	fullNode.LatestBlocknumber = number
+	fullNode.LatestBlockNumber = number
 	fullNode.NetDuration = duration
 	if duration < 1000 {
 		fullNode.NetStatus = 0
@@ -92,14 +104,17 @@ func (c *ChainNode) UpdateFullNode(chainCode string, fullNode *common.FullNode) 
 	return nil
 }
 
-func NewChainNodeSrv(x *xlog.XLog, cfg *config.Config) ChainNodeInterface {
+func NewChainNodeSrv(x *xlog.XLog, cfg *config.Config, ctx context.Context) ChainNodeInterface {
 	sql := db.NewMysql(x, cfg.BaseDb)
 	l := x.WithField("model", "chainNode")
-	return &ChainNode{
+	c := &ChainNode{
 		baseDb:    sql,
 		log:       l,
 		chainPath: cfg.ChainPath,
 	}
+	c.LoadChains(ctx)
+	c.RefreshFullNode(ctx)
+	return c
 }
 
 func (c *ChainNode) LoadChains(ctx context.Context) {
@@ -150,7 +165,19 @@ func (c *ChainNode) RefreshFullNode(ctx context.Context) {
 	}()
 }
 
-func (c *ChainNode) Query() (*common.ChainNode, error) {
-	//TODO implement me
-	panic("implement me")
+func (c *ChainNode) Query(chain string) (*common.ChainNode, error) {
+	for _, v := range c.chains {
+		if fmt.Sprintf("%v", v.ChainCode) == chain {
+			r := &common.ChainNode{
+				Chain: v,
+			}
+			f, err := c.GetAdvanceFullNode(chain)
+			if err != nil {
+				return nil, err
+			}
+			r.FullNode = []*common.FullNode{f}
+			return r, nil
+		}
+	}
+	return nil, fmt.Errorf("no record")
 }

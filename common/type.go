@@ -54,15 +54,15 @@ CREATE TABLE `chain_node` (
 */
 type FullNode struct {
 	ID                int64     `json:"id" gorm:"column:id"`
-	ChainCode         string    `json:"chain_code" gorm:"column:chain_code"`                 // 区块链码
-	ChainName         string    `json:"chain_name" gorm:"column:chain_name"`                 // 区块链简称
-	ChainIcon         string    `json:"chain_icon" gorm:"column:chain_icon"`                 // 区块链icon
-	ChainUri          string    `json:"chain_uri" gorm:"column:chain_uri"`                   // 本链的访问方式，不同访问协议 json 数组
-	NodeUri           string    `json:"node_uri" gorm:"column:node_uri"`                     // Fullnode 节点的访问方式，json 数组
-	NodeJwt           string    `json:"node_jwt" gorm:"column:node_jwt"`                     // fullnode 节点jwt
-	LatestBlocknumber string    `json:"latest_blocknumber" gorm:"column:latest_blocknumber"` // 最新的区块高度
-	NetStatus         int       `json:"net_status" gorm:"column:net_status"`                 // 网络状态 0:正常 1: 较慢 2: 不可用
-	NetDuration       int64     `json:"net_duration" gorm:"column:net_duration"`             // 请求耗时，单位毫秒
+	ChainCode         string    `json:"chain_code" gorm:"column:chain_code"`                  // 区块链码
+	ChainName         string    `json:"chain_name" gorm:"column:chain_name"`                  // 区块链简称
+	ChainIcon         string    `json:"chain_icon" gorm:"column:chain_icon"`                  // 区块链icon
+	ChainUri          string    `json:"chain_uri" gorm:"column:chain_uri"`                    // 本链的访问方式，不同访问协议 json 数组
+	NodeUri           string    `json:"node_uri" gorm:"column:node_uri"`                      // Fullnode 节点的访问方式，json 数组
+	NodeJwt           string    `json:"node_jwt" gorm:"column:node_jwt"`                      // fullnode 节点jwt
+	LatestBlockNumber string    `json:"latest_block_number" gorm:"column:latest_blocknumber"` // 最新的区块高度
+	NetStatus         int       `json:"net_status" gorm:"column:net_status"`                  // 网络状态 0:正常 1: 较慢 2: 不可用
+	NetDuration       int64     `json:"net_duration" gorm:"column:net_duration"`              // 请求耗时，单位毫秒, -1: 不可用时
 	CreateTime        time.Time `json:"create_time" gorm:"column:create_time"`
 	UpdateTime        time.Time `json:"update_time" gorm:"column:update_time"`
 }

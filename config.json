@@ -4,10 +4,10 @@
   "ChainPath": "/chain.json",
   "BaseDb": {
     "Addr": "192.168.2.9",
-    "Port": 9000,
-    "User": "test",
-    "Password": "test",
-    "DbName": "base"
+    "Port": 3306,
+    "User": "root",
+    "Password": "12345678",
+    "DbName": "easynode_monitor"
   }
 }
 
